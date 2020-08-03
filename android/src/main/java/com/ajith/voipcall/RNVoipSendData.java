@@ -11,7 +11,6 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
-
 public class RNVoipSendData {
     private ReactApplicationContext mReactContext;
     public RNVoipSendData(ReactApplicationContext reactContext) {
@@ -33,6 +32,9 @@ public class RNVoipSendData {
 
             switch (action) {
                 case "callAnswer":
+                    promise.resolve(params);
+                    break;
+                case "callDismiss":
                     promise.resolve(params);
                     break;
                 case "fullScreenIntent":
@@ -83,7 +85,7 @@ public class RNVoipSendData {
                     break;
             }
         }catch(NullPointerException e){
-            
+
         }
     }
 

@@ -48,21 +48,26 @@ public class RNVoipCallModule extends ReactContextBaseJavaModule implements Acti
   }
 
   @ReactMethod
+  public void goToBackground(){
+    Activity activity = getCurrentActivity();
+    activity.moveTaskToBack(true);
+  }
+
+  @ReactMethod
   public void displayIncomingCall(ReadableMap jsonObject){
     ReadableMap data = RNVoipConfig.callNotificationConfig(jsonObject);
     rnVoipNotificationHelper.sendCallNotification(data);
   }
 
   @ReactMethod
-  public  void clearNotificationById(int id){
+  public void clearNotificationById(int id){
     rnVoipNotificationHelper.clearNotification(id);
   }
 
   @ReactMethod
   public void clearAllNotifications(){
-    rnVoipNotificationHelper.clearAllNorifications();
+    rnVoipNotificationHelper.clearAllNotifications();
   }
-
 
   @ReactMethod
   public void getInitialNotificationActions(Promise promise) {
@@ -81,8 +86,6 @@ public class RNVoipCallModule extends ReactContextBaseJavaModule implements Acti
   public void  stopRingtune(){
     RNVoipRingtunePlayer.getInstance(reactContext).stopMusic();
   }
-
-
 
   @ReactMethod
   public  void  showMissedCallNotification(String title, String body, String callerId){

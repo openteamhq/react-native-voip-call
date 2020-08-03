@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 public class RNVoipBroadcastReciever extends  BroadcastReceiver {
 
@@ -15,6 +16,11 @@ public class RNVoipBroadcastReciever extends  BroadcastReceiver {
         int notificationId = intent.getIntExtra("notificationId",0);
 
         switch (intent.getAction()){
+            case "callAnswer":
+                RNVoipRingtunePlayer.getInstance(context).stopMusic();
+                rnVoipNotificationHelper.clearNotification(notificationId);
+             // rnVoipNotificationHelper.showMissCallNotification(intent.getStringExtra("missedCallTitle"), intent.getStringExtra("missedCallBody"), intent.getStringExtra("callerId"));
+                break;
             case "callDismiss":
                 RNVoipRingtunePlayer.getInstance(context).stopMusic();
                 rnVoipNotificationHelper.clearNotification(notificationId);

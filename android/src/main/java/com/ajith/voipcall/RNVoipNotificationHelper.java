@@ -51,13 +51,15 @@ public class RNVoipNotificationHelper {
     public void sendNotification(ReadableMap json){
         int notificationID = json.getInt("notificationId");
 
-        Intent dissmissIntent = new Intent(context, RNVoipBroadcastReciever.class);
-        dissmissIntent.setAction("callDismiss");
-        dissmissIntent.putExtra("notificationId",notificationID);
-        dissmissIntent.putExtra("callerId", json.getString("callerId"));
-        dissmissIntent.putExtra("missedCallTitle", json.getString("missedCallTitle"));
-        dissmissIntent.putExtra("missedCallBody", json.getString("missedCallBody"));
-        PendingIntent callDismissIntent = PendingIntent.getBroadcast(context,0, dissmissIntent ,PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent dismissIntent = new Intent(context, RNVoipBroadcastReciever.class);
+        dismissIntent.putExtra("action", "callDismiss");
+        dismissIntent.putExtra("notificationId",notificationID);
+        dismissIntent.putExtra("callerId", json.getString("callerId"));
+        dismissIntent.putExtra("missedCallTitle", json.getString("missedCallTitle"));
+        dismissIntent.putExtra("missedCallBody", json.getString("missedCallBody"));
+        dismissIntent.setAction("callDismiss");
+
+        PendingIntent callDismissIntent = PendingIntent.getBroadcast(context, notificationID, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Uri sounduri = Uri.parse("android.resource://" + context.getPackageName() + "/"+ R.raw.nosound);
 
@@ -76,7 +78,7 @@ public class RNVoipNotificationHelper {
                 .setSound(sounduri)
                 .setContentText(json.getString("notificationBody"))
                 .addAction(0, json.getString("answerActionTitle"), getPendingIntent(notificationID, "callAnswer",json))
-                .addAction(0, json.getString("declineActionTitle"), callDismissIntent)
+                .addAction(0, json.getString("declineActionTitle"), getPendingIntent(notificationID, "callDismiss",json))
                 .build();
 
         NotificationManager notificationManager = notificationManager();
@@ -100,7 +102,6 @@ public class RNVoipNotificationHelper {
         }
     }
 
-
     public PendingIntent getPendingIntent(int notificationID , String type, ReadableMap json){
         Class intentClass = getMainActivityClass();
         Intent intent = new Intent(context, intentClass);
@@ -112,7 +113,6 @@ public class RNVoipNotificationHelper {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         return pendingIntent;
     }
-
 
     //Missed Call Notification
     public void showMissCallNotification(String title , String body, String callerId){
@@ -155,18 +155,17 @@ public class RNVoipNotificationHelper {
         }
     }
 
-
-
-
     public void clearNotification(int notificationID) {
         NotificationManager notificationManager = notificationManager();
         notificationManager.cancel(notificationID);
+        RNVoipRingtunePlayer.getInstance(context).stopMusic();
     }
 
 
-    public void clearAllNorifications(){
+    public void clearAllNotifications(){
         NotificationManager manager = notificationManager();
         manager.cancelAll();
+        RNVoipRingtunePlayer.getInstance(context).stopMusic();
     }
 
 
