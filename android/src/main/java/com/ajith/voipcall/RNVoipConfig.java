@@ -37,6 +37,11 @@ public class RNVoipConfig {
         }else{
             config.putString("channel_name", "call");
         }
+        if(checkType(json , "channel_description", "String")){
+            config.putString("channel_description", json.getString("channel_description"));
+        }else{
+            config.putString("channel_description", "Call Notifications");
+        }
         if(checkType(json , "duration", "Number")){
             config.putInt("duration", json.getInt("duration"));
         }else{

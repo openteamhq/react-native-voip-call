@@ -69,7 +69,7 @@ public class RNVoipRingtunePlayer {
                     new Runnable() {
                         public void run() {
                             if(mMediaPlayer.isPlaying()) {
-                                Intent intent = new Intent(mContext, RNVoipBroadcastReciever.class);
+                                Intent intent = new Intent(mContext, RNVoipBroadcastReceiver.class);
                                 intent.setAction("callTimeOut");
                                 intent.putExtra("callerId", json.getString("callerId"));
                                 intent.putExtra("missedCallTitle", json.getString("missedCallTitle"));

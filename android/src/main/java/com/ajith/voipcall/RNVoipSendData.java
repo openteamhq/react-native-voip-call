@@ -17,7 +17,7 @@ public class RNVoipSendData {
         mReactContext = reactContext;
     }
 
-    public void sendIntilialData(Promise promise, Intent intent){
+    public void sendInitialData(Promise promise, Intent intent){
         WritableMap params = Arguments.createMap();
         String action = intent.getAction();
         if(action == null){
@@ -51,11 +51,13 @@ public class RNVoipSendData {
                     break;
             }
         }catch (Exception e){
-            promise.reject("error",e.toString());
+            params.putString("error", e.toString());
+
+                    promise.resolve(params);
         }
     }
 
-    public  void sentEventToJsModule(Intent intent){
+    public void sentEventToJsModule(Intent intent){
         try{
             String action = intent.getAction();
             WritableMap params = Arguments.createMap();

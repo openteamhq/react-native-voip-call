@@ -17,9 +17,11 @@ import com.facebook.react.bridge.ReadableMap;
 public class RNVoipCallModule extends ReactContextBaseJavaModule implements ActivityEventListener {
 
   private final ReactApplicationContext reactContext;
+  private static ReactApplicationContext reactContextStatic;
 
   private  RNVoipNotificationHelper rnVoipNotificationHelper;
   private RNVoipSendData sendjsData;
+  private static RNVoipSendData sendjsDataStatic;
   public static final String LogTag = "RNVoipCall";
 
   @Override
@@ -32,14 +34,19 @@ public class RNVoipCallModule extends ReactContextBaseJavaModule implements Acti
     sendjsData.sentEventToJsModule(intent);
   }
 
+  public static void sendEventFromBroadcast(Intent intent) {
+     sendjsDataStatic.sentEventToJsModule(intent);
+ }
 
   RNVoipCallModule(ReactApplicationContext reactContext) {
     super(reactContext);
     this.reactContext = reactContext;
+    this.reactContextStatic = reactContext;
     reactContext.addActivityEventListener(this);
     Application applicationContext = (Application) reactContext.getApplicationContext();
     rnVoipNotificationHelper = new RNVoipNotificationHelper(applicationContext);
     sendjsData = new RNVoipSendData(reactContext);
+    sendjsDataStatic = sendjsData;
   }
 
   @Override
@@ -72,8 +79,11 @@ public class RNVoipCallModule extends ReactContextBaseJavaModule implements Acti
   @ReactMethod
   public void getInitialNotificationActions(Promise promise) {
     Activity activity = getCurrentActivity();
-    Intent intent = activity.getIntent();
-    sendjsData.sendIntilialData(promise,intent);
+
+    if(activity != null) {
+        Intent intent = activity.getIntent();
+        sendjsData.sendInitialData(promise,intent);
+    }
   }
 
 

@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-public class RNVoipBroadcastReciever extends  BroadcastReceiver {
+public class RNVoipBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -16,15 +16,17 @@ public class RNVoipBroadcastReciever extends  BroadcastReceiver {
         int notificationId = intent.getIntExtra("notificationId",0);
 
         switch (intent.getAction()){
-            case "callAnswer":
-                RNVoipRingtunePlayer.getInstance(context).stopMusic();
-                rnVoipNotificationHelper.clearNotification(notificationId);
-             // rnVoipNotificationHelper.showMissCallNotification(intent.getStringExtra("missedCallTitle"), intent.getStringExtra("missedCallBody"), intent.getStringExtra("callerId"));
-                break;
+//             case "callAnswer":
+//                 RNVoipRingtunePlayer.getInstance(context).stopMusic();
+//                 rnVoipNotificationHelper.clearNotification(notificationId);
+//              // rnVoipNotificationHelper.showMissCallNotification(intent.getStringExtra("missedCallTitle"), intent.getStringExtra("missedCallBody"), intent.getStringExtra("callerId"));
+//                 break;
             case "callDismiss":
+                RNVoipCallModule.sendEventFromBroadcast(intent);
+
                 RNVoipRingtunePlayer.getInstance(context).stopMusic();
-                rnVoipNotificationHelper.clearNotification(notificationId);
-               // rnVoipNotificationHelper.showMissCallNotification(intent.getStringExtra("missedCallTitle"), intent.getStringExtra("missedCallBody"), intent.getStringExtra("callerId"));
+//                 rnVoipNotificationHelper.clearNotification(notificationId);
+//                rnVoipNotificationHelper.showMissCallNotification(intent.getStringExtra("missedCallTitle"), intent.getStringExtra("missedCallBody"), intent.getStringExtra("callerId"));
                 break;
             case "callTimeOut":
                // rnVoipNotificationHelper.showMissCallNotification(intent.getStringExtra("missedCallTitle"), intent.getStringExtra("missedCallBody"), intent.getStringExtra("callerId"));

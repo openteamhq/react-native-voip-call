@@ -6,6 +6,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.IntentFilter;
 
 import androidx.core.app.NotificationCompat;
 import android.content.Context;
@@ -22,8 +23,7 @@ public class RNVoipNotificationHelper {
     public  final  String notificationChannel = "NotificationChannel";
     private Context context;
 
-
-    public RNVoipNotificationHelper(Application context){
+    public RNVoipNotificationHelper(Context context){
         this.context = context;
     }
 
@@ -51,7 +51,7 @@ public class RNVoipNotificationHelper {
     public void sendNotification(ReadableMap json){
         int notificationID = json.getInt("notificationId");
 
-        Intent dismissIntent = new Intent(context, RNVoipBroadcastReciever.class);
+        Intent dismissIntent = new Intent(context, RNVoipBroadcastReceiver.class);
         dismissIntent.putExtra("action", "callDismiss");
         dismissIntent.putExtra("notificationId",notificationID);
         dismissIntent.putExtra("callerId", json.getString("callerId"));
@@ -78,7 +78,8 @@ public class RNVoipNotificationHelper {
                 .setSound(sounduri)
                 .setContentText(json.getString("notificationBody"))
                 .addAction(0, json.getString("answerActionTitle"), getPendingIntent(notificationID, "callAnswer",json))
-                .addAction(0, json.getString("declineActionTitle"), getPendingIntent(notificationID, "callDismiss",json))
+                .addAction(0, json.getString("declineActionTitle"), callDismissIntent)
+//                 .addAction(0, json.getString("declineActionTitle"), getPendingIntent(notificationID, "callDismiss",json))
                 .build();
 
         NotificationManager notificationManager = notificationManager();
@@ -92,7 +93,7 @@ public class RNVoipNotificationHelper {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Uri sounduri = Uri.parse("android.resource://" + context.getPackageName() + "/"+ R.raw.nosound);
             NotificationChannel channel = new NotificationChannel(callChannel, json.getString("channel_name"), NotificationManager.IMPORTANCE_HIGH);
-            channel.setDescription("Call Notifications");
+            channel.setDescription(json.getString("channel_description"));
             channel.setSound(sounduri ,
                     new AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                             .setUsage(AudioAttributes.USAGE_UNKNOWN).build());

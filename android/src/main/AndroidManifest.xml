@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.ajith.voipcall">
         <application>
-            <receiver android:name="com.ajith.voipcall.RNVoipBroadcastReciever" />
+            <receiver android:name="com.ajith.voipcall.RNVoipBroadcastReceiver" />
         </application>
 </manifest>
-  
