@@ -51,15 +51,6 @@ public class RNVoipNotificationHelper {
     public void sendNotification(ReadableMap json){
         int notificationID = json.getInt("notificationId");
 
-        Intent dismissIntent = new Intent(context, RNVoipBroadcastReceiver.class);
-        dismissIntent.putExtra("action", "callDismiss");
-        dismissIntent.putExtra("notificationId",notificationID);
-        dismissIntent.putExtra("callerId", json.getString("callerId"));
-        dismissIntent.putExtra("missedCallTitle", json.getString("missedCallTitle"));
-        dismissIntent.putExtra("missedCallBody", json.getString("missedCallBody"));
-        dismissIntent.setAction("callDismiss");
-
-        PendingIntent callDismissIntent = PendingIntent.getBroadcast(context, notificationID, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Uri sounduri = Uri.parse("android.resource://" + context.getPackageName() + "/"+ R.raw.nosound);
 
@@ -78,7 +69,7 @@ public class RNVoipNotificationHelper {
                 .setSound(sounduri)
                 .setContentText(json.getString("notificationBody"))
                 .addAction(0, json.getString("answerActionTitle"), getPendingIntent(notificationID, "callAnswer",json))
-                .addAction(0, json.getString("declineActionTitle"), callDismissIntent)
+                .addAction(0, json.getString("declineActionTitle"), getPendingIntent(notificationID, "callAnswer", json))
 //                 .addAction(0, json.getString("declineActionTitle"), getPendingIntent(notificationID, "callDismiss",json))
                 .build();
 
@@ -107,7 +98,7 @@ public class RNVoipNotificationHelper {
         Class intentClass = getMainActivityClass();
         Intent intent = new Intent(context, intentClass);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        intent.putExtra("notificationId",notificationID);
+        intent.putExtra("notificationId" ,notificationID);
         intent.putExtra("callerId", json.getString("callerId"));
         intent.putExtra("action", type);
         intent.setAction(type);
