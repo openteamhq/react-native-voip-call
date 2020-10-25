@@ -68,6 +68,10 @@ public class RNVoipSendData {
                     params.putString("callerId", intent.getStringExtra("callerId"));
                     sendEvent(mReactContext,"RNVoipCallPerformAnswerCallAction", params);
                     break;
+                case "callDismiss":
+                    params.putString("callerId", intent.getStringExtra("callerId"));
+                    sendEvent(mReactContext,"RNVoipCallPerformEndCallAction", params);
+                    break;
                 case "fullScreenIntent":
                     params.putString("callerId", intent.getStringExtra("callerId"));
                     sendEvent(mReactContext,"RNVoipCallFullScreenIntent", params);
@@ -75,9 +79,6 @@ public class RNVoipSendData {
                 case "contentTap":
                     params.putString("callerId", intent.getStringExtra("callerId"));
                     sendEvent(mReactContext,"RNVoipCallNotificationTap", params);
-                    break;
-                case "callDismiss":
-                    sendEvent(mReactContext,"RNVoipCallPerformEndCallAction", params);
                     break;
                 case "missedCallTape":
                     params.putString("callerId", intent.getStringExtra("callerId"));
