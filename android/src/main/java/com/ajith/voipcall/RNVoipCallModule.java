@@ -26,20 +26,20 @@ public class RNVoipCallModule extends ReactContextBaseJavaModule implements Acti
 
   @Override
   public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent intent) {
-    Log.i("onActivityResult", intent.getAction());
+    Log.i("RNVoipCallModule", "onActivityResult" );
 
     sendjsData.sentEventToJsModule(intent);
   }
 
   @Override
   public void onNewIntent(Intent intent){
-    Log.i("onNewIntent", intent.getAction());
+    Log.i("RNVoipCallModule", "onNewIntent" );
 
     sendjsData.sentEventToJsModule(intent);
   }
 
   public static void sendEventFromBroadcast(Intent intent) {
-    Log.i("sendEventFromBroadcast", intent.getAction());
+    Log.i("RNVoipCallModule", "sendEventFromBroadcast");
 
     sendjsDataStatic.sentEventToJsModule(intent);
  }
@@ -54,7 +54,7 @@ public class RNVoipCallModule extends ReactContextBaseJavaModule implements Acti
     sendjsData = new RNVoipSendData(reactContext);
     sendjsDataStatic = sendjsData;
 
-    Log.i("Initilising RNVoipCallModule", "nanana");
+    Log.i("RNVoipCallModule", "Initilising RNVoipCallModule");
 
   }
 
